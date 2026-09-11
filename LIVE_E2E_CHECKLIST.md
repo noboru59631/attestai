@@ -27,7 +27,7 @@ Record the deployed `SignalEmitter` address as `SOURCE_CONTRACT_ADDRESS` and ver
 
 ## 3. Deploy the Creditcoin USC destination contract
 
-Use the Sepolia chain key configured for the Creditcoin USC testnet and the funded relayer address as the expected source sender:
+Use source chain key `1` (Ethereum Sepolia) and the funded relayer address as the expected source sender:
 
 ```sh
 pnpm --filter @attestai/contracts exec hardhat run packages/contracts/scripts/deploy-destination.ts --network creditcoin_usc_testnet
@@ -62,7 +62,7 @@ The transaction must call `verifyAndRecord`, which invokes the native verifier a
 ## 7. Verify explorer evidence
 
 - Open the Sepolia transaction hash on the Sepolia explorer.
-- Open the Creditcoin destination transaction hash on `https://explorer.usc-testnet2.creditcoin.network`.
+- Open the Creditcoin destination transaction hash on `https://creditcoin-testnet.blockscout.com`.
 - Confirm the destination receipt status is successful.
 - Confirm both destination events contain the expected source transaction hash and proof digest.
 - Re-submit the same proof and confirm replay protection rejects it.

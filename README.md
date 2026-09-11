@@ -10,10 +10,10 @@ The application does not enable real-money trading. Demo mode is explicit and us
 
 - Source chain: Ethereum Sepolia.
 - Execution chain: Creditcoin USC testnet.
-- Creditcoin chain ID: `102033`.
-- Creditcoin RPC: `wss://rpc.usc-testnet2.creditcoin.network`.
-- Creditcoin proof builder: `https://proof-gen-api.usc-testnet2.creditcoin.network`.
-- Creditcoin explorer: `https://explorer.usc-testnet2.creditcoin.network`.
+- Creditcoin chain ID: `102031`.
+- Creditcoin RPC: `https://rpc.cc3-testnet.creditcoin.network`.
+- Creditcoin proof builder: `https://proof-gen-api.cc3-testnet.creditcoin.network`.
+- Creditcoin explorer: `https://creditcoin-testnet.blockscout.com`.
 - USC source-chain key for Sepolia: `1` (distinct from Sepolia EVM chain ID `11155111`).
 - USC verifier precompile: `0x0000000000000000000000000000000000000FD2`.
 
@@ -21,7 +21,7 @@ These values follow the current official USC documentation. See `docs/REQUIREMEN
 
 ## Live Network Status
 
-USC Testnet 2 is currently blocked by an upstream DNS outage. The official RPC, proof builder, explorer, and GraphQL hostnames resolve to NXDOMAIN from the validation environment, so no USC transaction was submitted. Sepolia preflight and wallet funding checks passed; the real USC integration remains configured and ready to retry. See [`docs/UPSTREAM_BLOCKER.md`](docs/UPSTREAM_BLOCKER.md) for evidence and recovery steps.
+The live path now targets Creditcoin CC3 Testnet. The repository remains in Demo Mode until one real Sepolia signal is proven through the CC3 USC path and one successful decision receipt is recorded.
 
 ## Quick start
 
@@ -46,7 +46,7 @@ Live tooling uses `CREDITCOIN_PROOF_BUILDER_URL` for the official USC SDK proof 
 
 ## Submission Text
 
-AttestAI demonstrates a proof-aware cross-chain decision flow for Creditcoin USC. The live USC Testnet 2 run is currently blocked by an upstream DNS outage affecting the official RPC, proof builder, explorer, and GraphQL endpoints. The repository preserves the real integration and provides a deterministic Demo Mode for review; simulated proof data is explicitly not presented as onchain verification. No transaction was submitted while the official USC endpoints were unreachable.
+AttestAI demonstrates a proof-aware cross-chain decision flow for Creditcoin USC. The live path uses Creditcoin CC3 Testnet; until a real receipt is captured, deterministic Demo Mode remains explicit and simulated proof data is never presented as onchain verification.
 
 ## English-only rule
 

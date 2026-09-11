@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { chainInfo } from "@gluwa/usc-sdk";
 import { required } from "./env.js";
 import { createProvider } from "./provider.js";
 
@@ -29,11 +30,19 @@ async function main() {
   const creditcoin = required("CREDITCOIN_RPC_URL");
   required("CREDITCOIN_PROOF_BUILDER_URL");
   const sourceChainKey = Number(required("SOURCE_CHAIN_KEY"));
-  if (sourceChainKey !== 1) throw new Error("SOURCE_CHAIN_KEY must be 1 for Ethereum Sepolia on USC Testnet 2");
+  if (sourceChainKey !== 1) throw new Error("SOURCE_CHAIN_KEY must be 1 for Ethereum Sepolia on Creditcoin CC3 Testnet");
   console.log("SOURCE_CHAIN_KEY: 1 (Ethereum Sepolia)");
   for (const [name, address] of [["SOURCE_CONTRACT_ADDRESS", process.env.SOURCE_CONTRACT_ADDRESS], ["DECISION_CONTRACT_ADDRESS", process.env.DECISION_CONTRACT_ADDRESS]] as const) if (address && !ethers.isAddress(address)) throw new Error(`${name} is invalid`);
   await checkRpc("Sepolia", source, 11155111);
-  await checkRpc("Creditcoin USC Testnet", creditcoin, Number(process.env.CREDITCOIN_CHAIN_ID ?? 102033));
+  await checkRpc("Creditcoin CC3 Testnet", creditcoin, Number(process.env.CREDITCOIN_CHAIN_ID ?? 102031));
+  const creditcoinProvider = createProvider(creditcoin);
+  try {
+    const supportedChains = await new chainInfo.PrecompileChainInfoProvider(creditcoinProvider as any).getSupportedChains();
+    if (!supportedChains.some((chain) => chain.chainKey === sourceChainKey)) throw new Error(`SOURCE_CHAIN_KEY=${sourceChainKey} is not supported on Creditcoin CC3 Testnet`);
+    console.log(`Supported source chain: key=${sourceChainKey} (Ethereum Sepolia)`);
+  } finally {
+    if ("destroy" in creditcoinProvider && typeof creditcoinProvider.destroy === "function") creditcoinProvider.destroy();
+  }
   console.log("PREFLIGHT_OK");
 }
 
