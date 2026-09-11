@@ -1,11 +1,6 @@
 packages:
   - apps/*
   - packages/*
-overrides:
-  "@noble/hashes": "1.3.2"
-  "@noble/curves": "1.4.0"
-  "@scure/bip32": "1.4.0"
-  "@scure/bip39": "1.3.0"
 allowBuilds:
   esbuild: true
   keccak: true
