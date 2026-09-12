@@ -21,7 +21,7 @@ These values follow the current official USC documentation. See `docs/REQUIREMEN
 
 ## Live Network Status
 
-The live path now targets Creditcoin CC3 Testnet. The repository remains in Demo Mode until one real Sepolia signal is proven through the CC3 USC path and one successful decision receipt is recorded.
+The live path targets Creditcoin CC3 Testnet. A real Sepolia signal was accepted through the CC3 USC path on 2026-09-12, and the resulting decision receipt is recorded at [0xe8b2...b7d0f](https://creditcoin-testnet.blockscout.com/tx/0xe8b2a92dc044bdd6d8a05b25ef731ad7f61ac614d0fcf6944b2a1e1fbcfb7d0f). The dashboard's verified state is backed by that receipt and its `VerifiedSignalAccepted` and `DecisionRecorded` events.
 
 ## Quick start
 
@@ -33,7 +33,7 @@ pnpm typecheck
 pnpm build
 ```
 
-Set `DEMO_MODE=false` only after configuring a deployed source contract, Creditcoin decision contract, proof API, and funded relayer key.
+Set `DEMO_MODE=false` only after configuring a deployed source contract, Creditcoin decision contract, proof API, and funded relayer key. The recorded live decision is HOLD with confidence `78` and risk score `10`; real-money execution remains disabled.
 
 Live tooling uses `CREDITCOIN_PROOF_BUILDER_URL` for the official USC SDK proof builder, `SOURCE_CHAIN_KEY` for the Creditcoin source-chain identifier, and `RELAYER_PRIVATE_KEY` for the dedicated test wallet. The preflight command validates both RPC chain IDs and non-zero wallet balances without printing the private key.
 
@@ -46,7 +46,7 @@ Live tooling uses `CREDITCOIN_PROOF_BUILDER_URL` for the official USC SDK proof 
 
 ## Submission Text
 
-AttestAI demonstrates a proof-aware cross-chain decision flow for Creditcoin USC. The live path uses Creditcoin CC3 Testnet; until a real receipt is captured, deterministic Demo Mode remains explicit and simulated proof data is never presented as onchain verification.
+AttestAI demonstrates a proof-aware cross-chain decision flow for Creditcoin USC. The live path uses Creditcoin CC3 Testnet and the dashboard records a receipt-backed `Onchain Verified` decision; deterministic Demo Mode remains available for fixture-based review and simulated proof data is never presented as onchain verification.
 
 ## English-only rule
 

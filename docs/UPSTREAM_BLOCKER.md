@@ -16,25 +16,23 @@ Official values reported by the manifest:
 | Proof Builder | `https://proof-gen-api.cc3-testnet.creditcoin.network` | HTTP health `200`; `status=healthy` |
 | Explorer | `https://creditcoin-testnet.blockscout.com` | HTTP API reachable |
 
-The legacy USC Testnet 2 RPC remains unreachable, but the current CC3 endpoints are reachable. The official CC3 documentation specifies chain ID `102031`, the HTTPS RPC above, and the Blockscout explorer. The official USC SDK documents the CC3 proof service, and the official bridge tutorial confirms Sepolia as the source chain with source-chain key `1`.
+The legacy USC Testnet 2 RPC remains out of scope; the current CC3 endpoints are reachable. The official CC3 documentation specifies chain ID `102031`, the HTTPS RPC above, and the Blockscout explorer. The official USC SDK documents the CC3 proof service, and the official bridge tutorial confirms Sepolia as the source chain with source-chain key `1`.
 
 ## Validation status
 
 - CC3 endpoint validation: PASS.
-- USC live proof flow: BLOCKED after attestation; the single proof request to `https://proof-gen-api.cc3-testnet.creditcoin.network/api/v1/proof-by-tx/1/0xa4c4659d9f42b2fee82ae8e46411806d511d8d931404a93e326482dc5173c7ca` returned HTTP `404`.
-- Destination verification transaction: NONE. The live run stopped at the first unexpected proof-service response; no retry was made.
+- USC live proof flow: PASS. The existing proof request for source transaction `0xa4c4659d9f42b2fee82ae8e46411806d511d8d931404a93e326482dc5173c7ca` returned usable proof material.
+- Destination verification transaction: PASS. `0xe8b2a92dc044bdd6d8a05b25ef731ad7f61ac614d0fcf6944b2a1e1fbcfb7d0f` finalized with receipt status `1` and emitted both verification and decision events.
 - Network configuration: migrated to CC3 values in `.env.example`, Hardhat defaults, worker preflight, endpoint checks, README, checklist, and dashboard explorer link.
 
 Demo Mode is available for deterministic review. Demo fixtures are labeled `Simulated` and are never described as onchain verified.
 
-## What remains before claiming Onchain Verified
+## Verified result
 
-1. Confirm the official CC3 proof API route for transaction-hash proofs; the health endpoint is live but the attempted SDK-compatible `proof-by-tx` route returned `404`.
-2. After the route is confirmed, run `pnpm --filter @attestai/worker preflight` and confirm Sepolia chain ID `11155111`, CC3 chain ID `102031`, `SOURCE_CHAIN_KEY=1`, supported-chain metadata, and non-zero balances.
-3. Reuse the already deployed public contracts and the already emitted source signal only if the official proof flow explicitly supports them; otherwise stop rather than emit another signal.
-4. Submit one real `verifyAndRecord` transaction to CC3 Testnet through the relayer only after a successful proof response.
-5. Confirm the transaction receipt, `VerifiedSignalAccepted` event, proof digest, and decision record on the official explorer.
-6. Re-run the dashboard in live mode and label the Proof Inspector state `Onchain Verified` only after those receipt checks pass.
+1. Receipt status is `1` at CC3 block `5472172`.
+2. `VerifiedSignalAccepted` contains proof digest `0x496d106cdeacc7cc0bd595195d19dc2ca697d0fb7aef642d8779e589d3d89066`.
+3. `DecisionRecorded` contains action `1` (`HOLD`), confidence `78`, and risk score `10`.
+4. The dashboard and submission materials now link to the verified receipt.
 
 ## Recheck command
 

@@ -3,7 +3,7 @@ import { proofBuilderUrl, required } from "./env.js";
 import { chainInfo, proofProvider } from "@gluwa/usc-sdk";
 import { createProvider } from "./provider.js";
 
-const abi = ["function verifyAndRecord(uint64,uint64,bytes,(bytes32,(bytes32,bool)[]),(bytes32,bytes32[]),bytes32,uint8,uint8)"];
+const abi = ["function verifyAndRecord(uint64 chainKey,uint64 blockHeight,bytes encodedTransaction,(bytes32 root,(bytes32 hash,bool isLeft)[] siblings) merkleProof,(bytes32 lowerEndpointDigest,bytes32[] roots) continuityProof,bytes32 sourceTxHash,uint8 action,uint8 confidence,uint8 riskScore)"];
 
 async function main() {
   const chainKey = Number(required("SOURCE_CHAIN_KEY"));

@@ -37,11 +37,11 @@ Ethereum Sepolia hosts `SignalEmitter`, which emits `MarketSignal`. The worker t
 
 ## Creditcoin USC v2 Integration
 
-The repository targets USC Testnet 2 with Creditcoin chain ID `102033`. Ethereum Sepolia is represented by USC source-chain key `1`, which is distinct from the EVM chain ID `11155111`. The configured native verifier address is `0x0000000000000000000000000000000000000FD2`.
+The repository targets CC3 Testnet with Creditcoin chain ID `102031`. Ethereum Sepolia is represented by USC source-chain key `1`, which is distinct from the EVM chain ID `11155111`. The configured native verifier address is `0x0000000000000000000000000000000000000FD2`.
 
 The live worker uses the official USC SDK proof-builder path: it requests proof data for a source transaction, passes the returned header number, encoded transaction, Merkle proof, and continuity proof to `verifyAndRecord`, and waits for the Creditcoin receipt. The destination contract calls `verify(chainKey, blockHeight, encodedTransaction, merkleProof, continuityProof)` synchronously. It derives a query key from source chain, block height, and transaction index, then stores replay protection after verification.
 
-The repository preserves this live integration, but the current validation environment recorded an upstream DNS blocker for the official USC Testnet 2 RPC, proof builder, explorer, and GraphQL hostnames. No USC transaction was submitted during that blocked validation.
+The live integration was validated on CC3 Testnet on 2026-09-12 using the existing Sepolia source transaction. The destination receipt is `0xe8b2a92dc044bdd6d8a05b25ef731ad7f61ac614d0fcf6944b2a1e1fbcfb7d0f` and emitted both `VerifiedSignalAccepted` and `DecisionRecorded`.
 
 ## Semantic Validation
 
@@ -74,7 +74,7 @@ The dashboard distinguishes three states:
 - **Locally Validated:** local checks and guardrails passed, but no Creditcoin receipt proves the flow.
 - **Onchain Verified:** a real USC proof was accepted by the destination contract and the receipt and events were checked.
 
-The current dashboard is explicitly Demo Mode. It shows the state labels and keeps the onchain state unclaimed until the live flow is completed.
+The dashboard records the validated CC3 receipt as `Onchain Verified` and links to the public explorer receipt. Demo Mode remains available for deterministic fixture review.
 
 ## Security and Threat Model
 
@@ -86,18 +86,17 @@ Threats include forged or irrelevant payloads, failed source transactions, wrong
 
 The monorepo contains a Next.js dashboard, a worker for relay and decision logic, and Hardhat contracts. Contract tests cover wrong chain, malformed payload, wrong source contract, failed source transaction, invalid proof, and replay rejection. Worker tests cover blocking unverified data and accepting a verified liquid signal. The live end-to-end checklist remains deployment- and funding-dependent.
 
-## Current Demo Mode and Blocker
+## Current Live Validation
 
-The current public repository is reviewable in deterministic Demo Mode. The UI states `DEMO MODE - deterministic fixtures only - no onchain verification claimed`. The fixture source hash is zero-filled and the proof digest is a demo label; neither is a transaction hash or cryptographic proof.
+On 2026-09-12, the existing Sepolia source transaction `0xa4c4659d9f42b2fee82ae8e46411806d511d8d931404a93e326482dc5173c7ca` was proven through CC3 and accepted by `AttestAIDecision`. The Creditcoin transaction `0xe8b2a92dc044bdd6d8a05b25ef731ad7f61ac614d0fcf6944b2a1e1fbcfb7d0f` finalized with receipt status `1` at block `5472172`.
 
-On 2026-09-12, the repository's validation record reported NXDOMAIN for the official USC Testnet 2 RPC, proof builder, explorer, and GraphQL hostnames. Sepolia preflight and wallet funding checks passed, but live proof retrieval was blocked before any USC transaction. The network configuration was left unchanged. Once endpoints resolve, the documented sequence is to re-run health checks, confirm chain IDs and balances, deploy if needed, emit a source signal, fetch proof, submit `verifyAndRecord`, and only then label the inspector `Onchain Verified`.
+The receipt emitted `VerifiedSignalAccepted` with proof digest `0x496d106cdeacc7cc0bd595195d19dc2ca697d0fb7aef642d8779e589d3d89066` and `DecisionRecorded` with action `HOLD` (`1`), confidence `78`, and risk score `10`. This is the evidence for the dashboard's `Onchain Verified` state. The application still does not execute real-money trades.
 
 ## Roadmap and Use Cases Beyond Trading
 
-1. Restore endpoint reachability and complete a receipt-backed USC Testnet 2 run.
-2. Add richer source event schemas and stronger policy configuration.
-3. Extend the same boundary to lending risk, treasury controls, insurance claims, compliance attestations, DAO operations, and agent-to-agent permissions.
-4. Add user-facing proof export and independent verification views.
+1. Add richer source event schemas and stronger policy configuration.
+2. Extend the same boundary to lending risk, treasury controls, insurance claims, compliance attestations, DAO operations, and agent-to-agent permissions.
+3. Add user-facing proof export and independent verification views.
 
 The core pattern is general: prove a cross-chain fact, validate its meaning, apply deterministic policy, then let an AI explain or prioritize the result.
 
@@ -113,4 +112,4 @@ The live demo and demo-video entries are intentionally marked as unpublished bec
 
 ## Conclusion
 
-AttestAI treats AI decisions as downstream of evidence. Creditcoin USC supplies the cross-chain verification boundary; the destination contract supplies semantic validation and replay protection; deterministic guardrails define the AI boundary; and the Proof Inspector makes the current evidence state visible. The implementation is designed to become receipt-backed when upstream USC infrastructure is reachable, while remaining honest and reviewable in Demo Mode today.
+AttestAI treats AI decisions as downstream of evidence. Creditcoin USC supplies the cross-chain verification boundary; the destination contract supplies semantic validation and replay protection; deterministic guardrails define the AI boundary; and the Proof Inspector makes the receipt-backed evidence state visible. The implementation remains honest and reviewable in both live and Demo Mode.
