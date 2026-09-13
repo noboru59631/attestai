@@ -1,8 +1,54 @@
-# AttestAI — Verify First. Decide Second.
+# AttestAI — Verified Collateral. Adaptive Intelligence.
 
 > **Creditcoin verifies the facts. AI interprets the facts.**
 
+> **AI proposes. Guardrails constrain. Verified collateral authorizes.**
+
 AttestAI is a trust layer for autonomous AI decisions. Before an AI agent can interpret a cross-chain signal, AttestAI verifies the signal through **Creditcoin USC**, validates its meaning, applies deterministic risk guardrails, and records the resulting decision on Creditcoin.
+
+The `research/verified-collateral-ai-authority` branch extends that proven path with a testnet-only collateral vault and dynamic agent authority. It does not alter or replace the existing live market-signal evidence.
+
+## Verified collateral and adaptive authority
+
+```text
+Ethereum Sepolia AttestAICollateralVault event
+        ↓
+Attestcoin / USC cryptographic verification
+        ↓
+Semantic validation on Creditcoin CC3
+        ↓
+Reconstructed verified vault collateral
+        ↓
+Deterministic percentage + per-trade + absolute caps
+        ↓
+Adaptive market-regime proposal
+        ↓
+Guardrail result and bounded onchain proposal record
+```
+
+- **Verification — What is true?** Only proven vault deposit and withdrawal events update collateral.
+- **Authority — What is allowed?** Configurable deterministic policy derives a current risk budget.
+- **AI — What should we do?** Regime reasoning proposes `BUY`, `SELL`, `HOLD`, or `REFER` inside that budget.
+
+This is reconstructed verified vault state, not a proof of an arbitrary Ethereum wallet balance. A generic `eth_getBalance` response never creates authority. Missing collateral proof, unreliable market data, or malformed AI output fails safely to zero allocation and `HOLD/REFER`.
+
+Cross-chain updates are asynchronous. Authority reflects only the latest vault lifecycle events proven and applied on CC3, not instantaneous Sepolia state. A Sepolia withdrawal does not reduce CC3 authority until its `CollateralWithdrawn` event is attested, proven, and accepted; real-money execution remains disabled.
+
+The collateral contracts and local authority tests are implemented. A real 0.001 Sepolia test ETH deposit was proven through USC and accepted on CC3, creating 0.0002 ETH of bounded authority under the deployed 20% policy. Missing market data produced a real zero-allocation `REFER` fallback, which was recorded on CC3 with execution disabled. A later 0.0005 ETH withdrawal was also proven, reducing verified collateral to 0.0005 ETH and authority to 0.0001 ETH.
+
+| Collateral prototype evidence | Address or transaction |
+| --- | --- |
+| Sepolia collateral vault | [`0x62C98EE377a9D21c9793Bef58156f8E1272cA1Cf`](https://sepolia.etherscan.io/address/0x62C98EE377a9D21c9793Bef58156f8E1272cA1Cf) |
+| Sepolia deposit transaction | [`0x38eef42991aaf1adcdf3054572d0fbee4413c3c80e7a32a9810f3dc6afdb23cc`](https://sepolia.etherscan.io/tx/0x38eef42991aaf1adcdf3054572d0fbee4413c3c80e7a32a9810f3dc6afdb23cc) |
+| CC3 verified deposit proof | [`0xe32aec9434215fe0130effaa622d9cf0c9470ea0a4f2021a46adb7193f00308a`](https://creditcoin-testnet.blockscout.com/tx/0xe32aec9434215fe0130effaa622d9cf0c9470ea0a4f2021a46adb7193f00308a) |
+| CC3 decoder library | [`0xcdbBe6B9478CA9A4430A53e60Ae47BAA21E4cA29`](https://creditcoin-testnet.blockscout.com/address/0xcdbBe6B9478CA9A4430A53e60Ae47BAA21E4cA29) |
+| CC3 collateral authority | [`0xf1ffB0c8d934E43Ca8A44009c119098DCd3D562F`](https://creditcoin-testnet.blockscout.com/address/0xf1ffB0c8d934E43Ca8A44009c119098DCd3D562F) |
+| CC3 authority deployment | [`0xe5d3e7097599a1bd1c4f5cfe04bed415ab81e120d365b6dfcbe2195595631f3d`](https://creditcoin-testnet.blockscout.com/tx/0xe5d3e7097599a1bd1c4f5cfe04bed415ab81e120d365b6dfcbe2195595631f3d) |
+| CC3 safe proposal record | [`0xb6d9dfe4b14694afdb33b2e461ce8f42d6623224c4d9aacef72668644fd82915`](https://creditcoin-testnet.blockscout.com/tx/0xb6d9dfe4b14694afdb33b2e461ce8f42d6623224c4d9aacef72668644fd82915) |
+| Sepolia withdrawal transaction | [`0x7ffaee6bcb1513b9a8e7118992b780b2238705578e203ce1d35d796ad55fb4c7`](https://sepolia.etherscan.io/tx/0x7ffaee6bcb1513b9a8e7118992b780b2238705578e203ce1d35d796ad55fb4c7) |
+| CC3 verified withdrawal proof | [`0x1a5b9f78c1b407a796e0d8e8d76f33629f4d965716ebe396c85adca17e28fc84`](https://creditcoin-testnet.blockscout.com/tx/0x1a5b9f78c1b407a796e0d8e8d76f33629f4d965716ebe396c85adca17e28fc84) |
+
+**Current status:** full deposit and withdrawal lifecycle USC verified; authority reduction confirmed; safe zero-allocation proposal recorded; real-money execution disabled.
 
 ## The principle
 
@@ -103,6 +149,8 @@ Use the repository's environment configuration for local operation. Do not commi
 - `apps/worker`: source event watcher, proof relay, guardrails, and AI adapter.
 - `packages/contracts`: Hardhat Solidity contracts and tests.
 - `docs`: architecture, requirements traceability, and submission materials.
+
+See `docs/VERIFIED_COLLATERAL_AUTHORITY.md` for the trust boundaries, policy, proof semantics, safe claims, and testnet runbook.
 
 ## Hackathon summary
 
